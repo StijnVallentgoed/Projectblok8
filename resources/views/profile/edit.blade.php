@@ -24,6 +24,16 @@
                     @include('profile.partials.delete-user-form')
                 </div>
             </div>
+
+            @if (session('status') === 'profile-updated')
+                <div class="p-4 sm:p-8 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200 shadow sm:rounded-lg">
+                    <p>{{ __('Profile updated successfully.') }}</p>
+                </div>
+            @elseif (session('status') === 'password-updated')
+                <div class="p-4 sm:p-8 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200 shadow sm:rounded-lg">
+                    <p>{{ __('Password updated successfully.') }}</p>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

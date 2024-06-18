@@ -10,14 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
      * Display the registration view.
      */
-    public function create(): View
+    public function create()
     {
         return view('auth.register');
     }
@@ -27,24 +26,39 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'voornaam' => ['required', 'string', 'max:255'],
+            'tussenvoegsel' => ['nullable', 'string', 'max:255'],
+            'achternaam' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'huisnummer' => ['required', 'string', 'max:255'],
+            'straatnaam' => ['required', 'string', 'max:255'],
+            'postcode' => ['required', 'string', 'max:255'],
+            'plaatsnaam' => ['required', 'string', 'max:255'],
+            'land' => ['required', 'string', 'max:255'],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'voornaam' => $request->voornaam,
+            'tussenvoegsel' => $request->tussenvoegsel,
+            'achternaam' => $request->achternaam,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'Huisnummer' => $request->huisnummer,
+            'Straatnaam' => $request->straatnaam,
+            'Postcode' => $request->postcode,
+            'plaatsnaam' => $request->plaatsnaam,
+            'Land' => $request->land,
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('welcome', absolute: false));
     }
 }
